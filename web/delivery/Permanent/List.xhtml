@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <h:form id="PermanentListForm">
+            <p:dataTable id="datalistMaster" value="#{permanent.master}" var="itemm"
+                         rowKey="#{itemm.deliveryPK}"
+                         selectionMode="single" 
+                         selection="#{permanent.masterselected}"
+                         rowIndexVar="index"
+                         style="text-align: center;"
+                         scrollable="true"
+                         scrollHeight="137"
+                         widgetVar="PermanentMasterTable" 
+                         sortBy="#{itemm.deliveryPK.tarigh}"
+                         sortOrder="descending" 
+                         >
+                <p:ajax event="rowSelect"  listener="#{permanent.setDetial(permanent.masterselected.wr)}" update=":PermanentListForm:datalistDetail" />
+
+                <f:facet name="header">
+                    مشخصات قطعات تحویلی
+                </f:facet> 
+
+                <p:column headerText="#{bundle.ListDeliveryTitle_username}">
+                    <h:outputText value="#{itemm.username}"/>
+                </p:column> 
+                <p:column headerText="#{bundle.ListDeliveryTitle_deliveryPK_applicantName}" filterBy="#{itemm.deliveryPK.applicantName}" filterMatchMode="in">
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="انتخاب" onchange="PF('PermanentMasterTable').filter()" >
+                            <f:selectItems value="#{permanent.ApplicantName()}" />
+                        </p:selectCheckboxMenu>                            
+                    </f:facet>          
+                    <h:outputText value="#{itemm.deliveryPK.applicantName}"/>
+                </p:column>  
+                <p:column headerText="#{bundle.ListDeliveryTitle_applicantDepartment}" filterBy="#{itemm.applicantDepartment}" filterMatchMode="in"> 
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="انتخاب" onchange="PF('PermanentMasterTable').filter()" >
+                            <f:selectItems value="#{permanent.ApplicantDepartment()}" />
+                        </p:selectCheckboxMenu>                            
+                    </f:facet>
+                    <h:outputText value="#{itemm.applicantDepartment}"/>
+                </p:column>  
+                <p:column headerText="#{bundle.ListDeliveryTitle_deliveryPK_tarigh}">
+                    <h:outputText value="#{itemm.deliveryPK.tarigh}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                        <f:converter converterId="ChangeDate"/>
+                    </h:outputText>
+                </p:column>                       
+                <p:column headerText="#{bundle.ListDeliveryTitle_wo}">
+                    <h:outputText value="#{itemm.wo}"/>
+                </p:column>                       
+                <p:column headerText="#{bundle.ListDeliveryTitle_wr}" filterBy="#{itemm.wr}" filterMatchMode="contains">
+                    <h:outputText value="#{itemm.wr}"/>
+                </p:column>   
+                <p:column headerText="ردیف" style="width:32px;">
+                    <h:outputText value="#{index + 1}" />
+                </p:column>
+                <f:facet name="footer">
+                    سطری را انتخاب کنید
+                </f:facet>
+            </p:dataTable>
+            <p:panel style="margin-top:5px;">
+                <p:dataTable id="datalistDetail" widgetVar="PermanentDetialTable"
+                             value="#{permanent.detial}" var="itemd"
+                             rowKey="#{itemd.deliveryPK}"
+                             selection="#{permanent.detialselected}"
+                             selectionMode="single"
+                             style="text-align: center"
+                             rowIndexVar="index"
+                             scrollable="true"
+                             scrollHeight="160"
+                             lazy="true"
+                             >
+                    <p:ajax event="rowSelect"   update="deleteButton viewButton editButton createButton" />
+
+                    <f:facet name="header">
+                        قطعات تحویل قطعی
+                    </f:facet>                       
+                    <p:column headerText="#{bundle.ListDeliveryTitle_tedad}">
+                        <h:outputText value="#{itemd.tedad}">
+
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{bundle.ListDeliveryTitle_itemcode}">
+                        <h:outputText value="#{itemd.itemcode}"/>
+                    </p:column>                        
+                    <p:column headerText="#{bundle.ListAnbarTitle_itemname}">
+                        <h:outputText value="#{itemd.anbar.itemname}"/>
+                    </p:column>                      
+                    <p:column headerText="ردیف" style="width:32px;">
+                        <h:outputText value="#{index + 1}" />
+                    </p:column> 
+                    <f:facet name="footer">
+                        <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}"  update=":growl,datalistDetail,:PermanentListForm:datalistMaster"  disabled="#{empty permanent.detialselected}">
+                            <f:actionListener binding="#{generalBean.destroy(permanent.detialselected)}"/>
+                            <f:actionListener binding= "#{permanent.setDetial(permanent.masterselected.wr)}"/>
+                            <f:actionListener binding="#{permanent.setDetialselected(null)}"/>
+                        </p:commandButton>
+                        <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}"   update=":PermanentDeliveryViewForm" oncomplete="PF('PermanentDeliveryViewDialog').show()" disabled="#{empty permanent.detialselected}" />
+                        <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}"   update=":PermanentDeliveryEditForm" oncomplete="PF('PermanentDeliveryEditDialog').show()" disabled="#{empty permanent.detialselected}" />
+                        <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" update=":PermanentCreateForm" oncomplete="PF('permanentCreateDialog').show()" actionListener="#{generalBean.prepareCreate}"  />
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <ui:include src="View.xhtml"/>
+        <ui:include src="Edit.xhtml"/>
+        <ui:include src="Create.xhtml"/>
+    </ui:composition>
+</html>

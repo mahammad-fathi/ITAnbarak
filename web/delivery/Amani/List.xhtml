@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <h:form id="AmaniForm">
+            <p:dataTable id="datalistMaster" value="#{amani.master}" var="itemm"
+                         rowKey="#{itemm.deliveryPK}"
+                         selectionMode="single" 
+                         selection="#{amani.masterselected}"
+                         rowIndexVar="index"
+                         style="text-align: center;"
+                         scrollable="true"
+                         scrollHeight="137"
+                         widgetVar="AmaniMasterTable" 
+                         sortBy="#{itemm.deliveryPK.tarigh}"
+                         sortOrder="descending" 
+                         >
+                <p:ajax event="rowSelect"  listener="#{amani.setDetial(amani.masterselected.deliveryPK.tarigh)}"   update=":AmaniForm:datalistDetail"/>
+                <f:facet name="header">
+                    تاریخ قطعات تحویلی امانی
+                </f:facet> 
+
+                <p:column headerText="نام تحویل دهنده">
+                    <h:outputText value="#{itemm.username}"/>
+                </p:column> 
+                <p:column headerText="#{bundle.ListDeliveryTitle_deliveryPK_applicantName}" filterBy="#{itemm.deliveryPK.applicantName}" filterMatchMode="in">
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="انتخاب" onchange="PF('AmaniMasterTable').filter()" >
+                            <f:selectItems value="#{amani.ApplicantName()}" />
+                        </p:selectCheckboxMenu>                            
+                    </f:facet>          
+                    <h:outputText value="#{itemm.deliveryPK.applicantName}"/>
+                </p:column> 
+                <p:column headerText="#{bundle.ListDeliveryTitle_applicantDepartment}" filterBy="#{itemm.applicantDepartment}" filterMatchMode="in"> 
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="انتخاب" onchange="PF('AmaniMasterTable').filter()" >
+                            <f:selectItems value="#{amani.applicantDepartment()}" />
+                        </p:selectCheckboxMenu>                            
+                    </f:facet>
+                    <h:outputText value="#{itemm.applicantDepartment}"/>
+                </p:column>  
+                <p:column headerText="#{bundle.ListDeliveryTitle_deliveryPK_tarigh}">
+                    <h:outputText value="#{itemm.deliveryPK.tarigh}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                        <f:converter converterId="ChangeDate"/>
+                    </h:outputText>
+                </p:column>                       
+
+                <p:column headerText="ردیف" style="width:32px;">
+                    <h:outputText value="#{index + 1}" />
+                </p:column>
+                <f:facet name="footer">
+                    سطری را انتخاب کنید
+                </f:facet>
+            </p:dataTable>
+            <p:panel style="margin-top:5px;">
+                <p:dataTable id="datalistDetail"
+                             value="#{amani.detial}" var="itemd"
+                             rowKey="#{itemd.deliveryPK}"
+                             selectionMode="single"
+                             selection="#{amani.detialselected}"
+                             style="text-align: center"
+                             rowIndexVar="index"
+                             scrollable="true"
+                             scrollHeight="160"
+                             lazy="true"
+                             >
+                    <p:ajax event="rowSelect" update="deleteButton editButton createButton passButton"/>
+
+                    <f:facet name="header">
+                        قطعات تحویل امانی
+                    </f:facet>                       
+                    <p:column headerText="#{bundle.ListDeliveryTitle_tedad}">
+                        <h:outputText value="#{itemd.tedad}"/>
+                    </p:column>
+                    <p:column headerText="#{bundle.ListDeliveryTitle_itemcode}">
+                        <h:outputText value="#{itemd.itemcode}"/>
+                    </p:column>                        
+                    <p:column headerText="#{bundle.ListAnbarTitle_itemname}">
+                        <h:outputText value="#{itemd.anbar.itemname}"/>
+                    </p:column>                      
+                    <p:column headerText="ردیف" style="width:32px;">
+                        <h:outputText value="#{index + 1}" />
+                    </p:column> 
+                    <f:facet name="footer">
+                        <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}"   update=":growl,datalistDetail,:AmaniForm:datalistMaster" disabled="#{empty amani.detialselected}">
+                            <f:actionListener binding="#{generalBean.destroy(amani.detialselected)}"/>
+                            <f:actionListener binding= "#{amani.setDetial(amani.masterselected.deliveryPK.tarigh)}"/>
+                            <f:actionListener binding="#{amani.setDetialselected(null)}"/>
+                        </p:commandButton>
+                        <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":AmaniEditForm" oncomplete="PF('AmaniEditDialog').show()" disabled="#{empty amani.detialselected}"/>
+                        <p:commandButton id="createButton" icon="ui-icon-plus"  actionListener="#{generalBean.prepareCreate}"  value="#{bundle.Create}"  update=":growl,:AmaniCreateForm" oncomplete="PF('AmaniCreateDialog').show()"/>
+                        <p:commandButton id="passButton"   icon="ui-icon-plus"  actionListener="#{generalBean.prepareCreate}"  value="پاس امانی"         update=":growl,:PassCreateForm"  oncomplete="PF('PassCreateDialog').show()"  disabled="#{amani.showpass}" />
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <ui:include src="Edit.xhtml"/>
+        <ui:include src="Create.xhtml"/>
+        <ui:include src="Pass.xhtml"/>
+    </ui:composition>
+</html>

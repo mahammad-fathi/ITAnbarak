@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <h:form id="AnbarListForm">
+
+            <p:dataTable id="datalist" value="#{anbarController.items}" var="item"
+                         selectionMode="single" selection="#{anbarController.selected}"
+                         rowKey="#{item.itemname}"
+                         widgetVar="AnbarTable"
+                         style="text-align: center"
+                         rowStyleClass="#{item.tedad eq 0 ? 'old' : null}"
+                         rowIndexVar="index"
+                         scrollable="true"
+                         scrollHeight="400"  
+                         sortBy="#{item.tarigh}"
+                         sortOrder="descending"
+                         >
+
+                <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+                <f:event type="preRenderView" listener="#{anbarController.refresh()}" />
+
+                <f:facet name="header">
+                    قطعات انبار
+                </f:facet>
+
+                <p:column headerText="#{bundle.ListAnbarTitle_departement}" filterBy="#{item.departement}" filterMatchMode="in">
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="انتخاب" onchange="PF('AnbarTable').filter()" >
+                            <f:selectItems value="#{anbarController.distanctDepartement}" />
+                        </p:selectCheckboxMenu>
+                    </f:facet>                         
+                    <h:outputText value="#{item.departement}"/>
+                </p:column>
+
+                <p:column headerText="#{bundle.ListAnbarTitle_tarigh}">
+                    <h:outputText value="#{item.tarigh}">
+                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+3:30" />
+                        <f:converter converterId="ChangeDate"/>
+                    </h:outputText>
+                </p:column>                        
+                <p:column headerText="تعداد امانی" id="AmaniCOL" >
+                    <h:outputFormat value="{0}">
+                        <f:param value="#{amani.TedadAmani(item.itemname)}"/>
+                    </h:outputFormat>
+                </p:column>                        
+                <p:column headerText="#{bundle.ListAnbarTitle_tedad}">
+                    <h:outputText value="#{item.tedad}">
+
+                    </h:outputText>
+                </p:column>                        
+                <p:column headerText="#{bundle.ListAnbarTitle_itemcode}">
+                    <h:outputText value="#{item.itemcode}"/>
+                </p:column>                      
+                <p:column headerText="#{bundle.ListAnbarTitle_itemname}">
+                    <h:outputText value="#{item.itemname}"/>
+                </p:column>                        
+                <p:column headerText="ردیف" style="width:32px;">
+                    <h:outputText value="#{index + 1}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{anbarController.destroy}" update=":growl,datalist" disabled="#{empty anbarController.selected}">
+                        <p:confirm header="اخطار" message="در صورت حذف این ردیف تمامی رکوردهای تحویلی و امانی نیز  حذف میگردنند" icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>   
+                    <p:confirmDialog id="confirmDialog"  global="true" showEffect="fade" hideEffect="fade" dir="rtl">
+                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                      
+                    </p:confirmDialog> 
+
+
+
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":AnbarEditForm" oncomplete="PF('AnbarEditDialog').show()" disabled="#{empty anbarController.selected}"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":AnbarViewForm" oncomplete="PF('AnbarViewDialog').show()" disabled="#{empty anbarController.selected}"/>
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{anbarController.prepareCreate}" update=":AnbarCreateForm" oncomplete="PF('AnbarCreateDialog').show()"/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <ui:include src="Create.xhtml"/>
+        <ui:include src="Edit.xhtml"/>
+        <ui:include src="View.xhtml"/>
+
+    </ui:composition>
+
+</html>

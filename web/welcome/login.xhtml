@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="sss"   widgetVar="loginDialog" visible="true" modal="true" resizable="false" appendTo="@(body)" header="ورود" dir="RTL" showEffect="explode" hideEffect="fold"  closable="false" >
+            <p:effect type="bounce" event="load" delay="400" />
+            <h:form>
+                <p:graphicImage name="/images/DataCenter/Arm-2.gif" />
+                <p:panel >
+                    <h:panelGrid columns="2" cellpadding="1" >
+                        <h:outputText value="کاربر:  "/>
+                        <p:inputText value="#{userView.firstname}"/>
+                        <h:outputText value="پسورد:  " />
+                        <p:password id="pass" value="#{userView.lastname}" feedback="true" />
+                    </h:panelGrid>
+                    
+                </p:panel>
+                <p:commandButton value="ورود"  action="#{userView.save}" icon="pi pi-check"  />
+
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

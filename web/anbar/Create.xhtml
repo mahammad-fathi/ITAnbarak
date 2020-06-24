@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AnbarCreateDlg" widgetVar="AnbarCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="فرم ورود قطعات انبار" dir="RTL" showEffect="explode" hideEffect="fold" closable="false"  closeOnEscape="true">
+            <h:form id="AnbarCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="#{bundle.CreateAnbarLabel_itemcode}" for="itemcode" />
+                        <p:inputText id="itemcode" value="#{anbarController.selected.itemcode}" title="#{bundle.CreateAnbarTitle_itemcode}" required="true" requiredMessage="#{bundle.CreateAnbarRequiredMessage_itemcode}">
+                            <f:converter converterId="toUpperCaseConverter"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{bundle.CreateAnbarLabel_itemname}" for="itemname" />
+                        <p:inputText id="itemname" value="#{anbarController.selected.itemname}" title="#{bundle.CreateAnbarTitle_itemname}" required="true" requiredMessage="#{bundle.CreateAnbarRequiredMessage_itemname}"/>
+                        <p:outputLabel value="#{bundle.CreateAnbarLabel_tedad}" for="tedad" />
+                        <p:spinner  id="tedad" value="#{anbarController.selected.tedad}" min="1" max="999"  required="true" requiredMessage="#{bundle.CreateAnbarRequiredMessage_tedad}"/>
+                        <p:outputLabel value="تاریخ" for="tarigh" />
+                        <p:calendar id="tarigh" pattern="MM/dd/yyyy"  value="#{anbarController.selected.tarigh}"   showOn="button" required="true"/>
+                        <p:outputLabel value="#{bundle.CreateAnbarLabel_departement}" for="departement" />
+                        <p:selectOneMenu id="departement" value="#{anbarController.selected.departement}" editable="true" style="width: 200px" required="true">
+                            <f:selectItems  value="#{anbarController.distanctDepartement}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateAnbarLabel_comment}" for="comment" />
+                        <p:inputTextarea rows="4" cols="30" id="comment" value="#{anbarController.selected.comment}" title="#{bundle.CreateAnbarTitle_comment}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{anbarController.create}" value="#{bundle.Save}" update="display,:AnbarListForm:datalist,:growl" oncomplete="handleSubmit(args,'AnbarCreateDialog');"  />
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PF('AnbarCreateDialog').hide()" immediate="true"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

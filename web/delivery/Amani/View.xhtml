@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AmaniDeliveryViewDlg" widgetVar="AmaniDeliveryViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewDeliveryTitle}" dir="RTL" showEffect="explode" hideEffect="fold" closable="false"  closeOnEscape="true">
+            <h:form id="AmaniDeliveryViewForm">
+                <h:panelGroup id="display3">
+                    <p:panelGrid columns="2" rendered="#{amani.detialselected != null}">
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_deliveryPK_applicantName}"/>
+                        <h:outputText value="#{amani.detialselected.deliveryPK.applicantName}" title="#{bundle.ViewDeliveryTitle_deliveryPK_applicantName}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_deliveryPK_tarigh}"/>
+                        <h:outputText value="#{amani.detialselected.deliveryPK.tarigh}" title="#{bundle.ViewDeliveryTitle_deliveryPK_tarigh}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_itemcode}"/>
+                        <h:outputText value="#{amani.detialselected.itemcode}" title="#{bundle.ViewDeliveryTitle_itemcode}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_tedad}"/>
+                        <h:outputText value="#{amani.detialselected.tedad}" title="#{bundle.ViewDeliveryTitle_tedad}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_comment}"/>
+                        <h:outputText value="#{amani.detialselected.comment}" title="#{bundle.ViewDeliveryTitle_comment}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_wr}"/>
+                        <h:outputText value="#{amani.detialselected.wr}" title="#{bundle.ViewDeliveryTitle_wr}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_wo}"/>
+                        <h:outputText value="#{amani.detialselected.wo}" title="#{bundle.ViewDeliveryTitle_wo}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_type}"/>
+                        <p:selectBooleanCheckbox value="#{amani.detialselected.type}" disabled="true"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_applicantDepartment}"/>
+                        <h:outputText value="#{amani.detialselected.applicantDepartment}" title="#{bundle.ViewDeliveryTitle_applicantDepartment}"/>
+                        <h:outputText value="#{bundle.ViewDeliveryLabel_username}"/>
+                        <h:outputText value="#{amani.detialselected.username}" title="#{bundle.ViewDeliveryTitle_username}"/>
+    
+                        <p:outputLabel value="#{bundle.CreateDeliveryTitle_itemname}" for="itemname" />
+                        <p:outputLabel  id="itemname" value="#{amani.detialselected.anbar.itemname}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="PF('AmaniDeliveryViewDialog').hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

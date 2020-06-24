@@ -1,0 +1,25 @@
+.ui-widget {
+    font-size: 15px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.old {
+    background-color: #ffdde1 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+.centered {
+position:relative;
+height: 100px;
+margin:0 auto;
+padding: 10% 0;
+}

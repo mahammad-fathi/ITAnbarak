@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PermanentDeliveryEditDlg" widgetVar="PermanentDeliveryEditDialog" modal="true" resizable="false" appendTo="@(body)" header="فرم ویرایش قطعه تحویل قطعی" dir="RTL" showEffect="explode" hideEffect="fold" closable="false"  closeOnEscape="true">
+            <h:form id="PermanentDeliveryEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_tedad}" for="tedad" />
+                        <p:inputText id="tedad" value="#{permanent.detialselected.tedad}" title="#{bundle.EditDeliveryTitle_tedad}" required="true" requiredMessage="#{bundle.EditDeliveryRequiredMessage_tedad}">
+                            <p:ajax event="change" listener="#{generalBean.ChekTedadـu(permanent.detialselected,permanent.detialselected.tedad)}" update="display,:growl"/>
+                        </p:inputText>
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{permanent.detialselected.username}" title="#{bundle.EditDeliveryTitle_username}" />
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_applicantDepartment}" for="applicantDepartment" />
+                        <p:inputText id="applicantDepartment" value="#{permanent.detialselected.applicantDepartment}" title="#{bundle.EditDeliveryTitle_applicantDepartment}" />
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_wr}" for="wr" />
+                        <p:inputText id="wr" value="#{permanent.detialselected.wr}" title="#{bundle.EditDeliveryTitle_wr}" />
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_wo}" for="wo" />
+                        <p:inputText id="wo" value="#{permanent.detialselected.wo}" title="#{bundle.EditDeliveryTitle_wo}" />
+                        <p:outputLabel value="#{bundle.EditDeliveryLabel_comment}" for="comment" />
+                        <p:inputTextarea rows="4" cols="30" id="comment" value="#{permanent.detialselected.comment}" title="#{bundle.EditDeliveryTitle_comment}" />
+
+                    </p:panelGrid>
+                    <p:commandButton  value="#{bundle.Save}" actionListener="#{permanent.update(permanent.detialselected)}" update="display,:growl,:PermanentListForm:datalistMaster,:PermanentListForm:datalistDetail" oncomplete="handleSubmit(args,'PermanentDeliveryEditDialog');" disabled="#{generalBean.overTedad}"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PF('PermanentDeliveryEditDialog').hide()" immediate="true"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

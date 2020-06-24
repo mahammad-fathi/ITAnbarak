@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title><ui:insert name="title">انبارک آی تی</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+        <h:outputScript library="js" name="FullScreen.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+
+
+            <p:layoutUnit position="center">
+                <!-- make a Single Page Application (SPA) -->
+                <h:panelGroup id="content" layout="block">
+
+                    <ui:fragment rendered="#{indexService.contentName eq 'login'}">
+                        <ui:include src="/welcome/login.xhtml" />
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{indexService.contentName eq 'Anbar'}">
+                        <ui:include src="/anbar/List.xhtml" /> 
+                    </ui:fragment> 
+
+                    <ui:fragment rendered="#{indexService.contentName eq 'Permanent'}">
+                        <ui:include src="/delivery/Permanent/List.xhtml" /> 
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{indexService.contentName eq 'Amani'}">
+                        <ui:include src="/delivery/Amani/List.xhtml" /> 
+                    </ui:fragment>
+
+                </h:panelGroup>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="175" header="ابزارها" collapsible="true" collapsed="true" effect="drop"  >
+                <ui:insert name="sidebarLeft_theme">
+                    <ui:include src="/theme/theme.xhtml"/>
+                </ui:insert>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south"  size="60">
+                <h:form>
+                    <p:dock position="bottom" >     
+                        <p:menuitem value="انبار " icon="/resources/images/dock/inventory.png"         actionListener="#{indexService.setContentName('Anbar')}"     update=":content"/>
+                        <p:menuitem value="تحویل قطعی" icon="/resources/images/dock/delivery-man.png"  actionListener="#{indexService.setContentName('Permanent')}" update=":content"/>
+                        <p:menuitem value="تحویل امانی" icon="/resources/images/dock/history.png"      actionListener="#{indexService.setContentName('Amani')}"     update=":content"/>
+                        <p:menuitem value="خروج" icon="/resources/images/dock/exit.png"                actionListener="#{indexService.setContentName('login')}"     update=":content"/>
+                    </p:dock>
+                </h:form> 
+            </p:layoutUnit>
+        </p:layout>
+
+    </h:body>
+</html>
